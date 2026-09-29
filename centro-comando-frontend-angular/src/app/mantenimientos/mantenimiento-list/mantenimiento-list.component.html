@@ -1,0 +1,44 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="mb-0">Programación de Mantenimientos</h2>
+  <a routerLink="/mantenimientos/nuevo" class="btn btn-primary">+ Nuevo mantenimiento</a>
+</div>
+
+<div class="alert alert-danger" *ngIf="error">{{ error }}</div>
+<div *ngIf="cargando" class="text-muted">Cargando...</div>
+
+<div class="table-responsive card p-2" *ngIf="!cargando && mantenimientos.length">
+  <table class="table align-middle mb-0">
+    <thead>
+      <tr>
+        <th>Tarea</th>
+        <th>Servidor</th>
+        <th>Tipo</th>
+        <th>Programado para</th>
+        <th>Estado</th>
+        <th class="text-end">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let m of mantenimientos">
+        <td>{{ m.titulo_tarea }}</td>
+        <td>{{ nombreServidor(m.servidor) }}</td>
+        <td class="text-capitalize">{{ m.tipo }}</td>
+        <td>{{ m.fecha_programada | date: 'short' }}</td>
+        <td>
+          <span class="badge" [class.bg-success]="m.completado" [class.bg-warning]="!m.completado">
+            {{ m.completado ? 'Ejecutado' : 'Pendiente' }}
+          </span>
+        </td>
+        <td class="text-end">
+          <button class="btn btn-sm btn-outline-success me-1" *ngIf="!m.completado" (click)="marcarCompletado(m)">
+            Completar
+          </button>
+          <a [routerLink]="['/mantenimientos', m.id, 'editar']" class="btn btn-sm btn-outline-secondary me-1">Editar</a>
+          <button class="btn btn-sm btn-outline-danger" (click)="eliminar(m)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p *ngIf="!cargando && !mantenimientos.length" class="text-muted">No hay mantenimientos programados.</p>

@@ -1,0 +1,62 @@
+<h2>{{ mantenimientoId ? 'Editar mantenimiento' : 'Nuevo mantenimiento' }}</h2>
+
+<div class="alert alert-danger" *ngIf="erroresMantenimiento['non_field_errors']">
+  {{ erroresMantenimiento['non_field_errors'][0] }}
+</div>
+
+<form [formGroup]="form" (ngSubmit)="guardar()" class="card p-4" style="max-width: 560px;">
+  <div class="mb-3">
+    <label class="form-label">Servidor asignado</label>
+    <select class="form-select" formControlName="servidor">
+      <option [ngValue]="null" disabled>Selecciona un servidor</option>
+      <option *ngFor="let s of servidores" [ngValue]="s.id">{{ s.nombre_host }}</option>
+    </select>
+    <div class="text-danger small" *ngIf="form.controls.servidor.touched && form.controls.servidor.invalid">
+      Debes seleccionar un servidor.
+    </div>
+    <div class="text-danger small" *ngIf="erroresMantenimiento['servidor']">{{ erroresMantenimiento['servidor'][0] }}</div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Título del mantenimiento</label>
+    <input type="text" class="form-control" formControlName="titulo_tarea" />
+    <div class="text-danger small" *ngIf="form.controls.titulo_tarea.touched && form.controls.titulo_tarea.invalid">
+      El título es obligatorio.
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Descripción técnica</label>
+    <textarea class="form-control" rows="3" formControlName="descripcion_tecnica"></textarea>
+    <div class="text-danger small" *ngIf="form.controls.descripcion_tecnica.touched && form.controls.descripcion_tecnica.invalid">
+      La descripción es obligatoria.
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Tipo de tarea</label>
+    <select class="form-select" formControlName="tipo">
+      <option *ngFor="let t of tipos" [value]="t.value">{{ t.label }}</option>
+    </select>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Fecha y hora programada</label>
+    <input type="datetime-local" class="form-control" formControlName="fecha_programada" />
+    <div class="text-danger small" *ngIf="form.controls.fecha_programada.touched && form.controls.fecha_programada.invalid">
+      La fecha programada es obligatoria.
+    </div>
+  </div>
+
+  <div class="form-check mb-3">
+    <input type="checkbox" class="form-check-input" id="completado" formControlName="completado" />
+    <label class="form-check-label" for="completado">¿Tarea ejecutada?</label>
+  </div>
+
+  <div class="d-flex gap-2">
+    <button type="submit" class="btn btn-primary" [disabled]="guardando">
+      {{ guardando ? 'Guardando...' : 'Guardar' }}
+    </button>
+    <a routerLink="/mantenimientos" class="btn btn-outline-secondary">Cancelar</a>
+  </div>
+</form>

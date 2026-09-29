@@ -1,0 +1,25 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+  <div class="container">
+    <a class="navbar-brand" routerLink="/servidores">Centro de Comando</a>
+    <div class="navbar-nav">
+      <a
+        class="nav-link"
+        routerLink="/servidores"
+        routerLinkActive="active fw-bold"
+        [routerLinkActiveOptions]="{ exact: false }"
+      >
+        Servidores
+      </a>
+      <a class="nav-link" routerLink="/incidencias" routerLinkActive="active fw-bold">
+        Incidencias
+      </a>
+      <a class="nav-link" routerLink="/mantenimientos" routerLinkActive="active fw-bold">
+        Mantenimientos
+      </a>
+    </div>
+  </div>
+</nav>
+
+<div class="container pb-5">
+  <router-outlet></router-outlet>
+</div>

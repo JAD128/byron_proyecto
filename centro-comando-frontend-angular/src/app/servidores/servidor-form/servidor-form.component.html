@@ -1,0 +1,54 @@
+<h2>{{ servidorId ? 'Editar servidor' : 'Nuevo servidor' }}</h2>
+
+<div class="alert alert-danger" *ngIf="erroresServidor['non_field_errors']">
+  {{ erroresServidor['non_field_errors'][0] }}
+</div>
+
+<form [formGroup]="form" (ngSubmit)="guardar()" class="card p-4" style="max-width: 560px;">
+  <div class="mb-3">
+    <label class="form-label">Hostname</label>
+    <input type="text" class="form-control" formControlName="nombre_host" />
+    <div class="text-danger small" *ngIf="form.controls.nombre_host.touched && form.controls.nombre_host.invalid">
+      El hostname es obligatorio.
+    </div>
+    <div class="text-danger small" *ngIf="erroresServidor['nombre_host']">
+      {{ erroresServidor['nombre_host'][0] }}
+    </div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Dirección IP</label>
+    <input type="text" class="form-control" formControlName="direccion_ip" placeholder="192.168.1.10" />
+    <div class="text-danger small" *ngIf="form.controls.direccion_ip.touched && form.controls.direccion_ip.invalid">
+      La dirección IP es obligatoria.
+    </div>
+    <div class="text-danger small" *ngIf="erroresServidor['direccion_ip']">
+      {{ erroresServidor['direccion_ip'][0] }}
+    </div>
+    <div class="form-text">El backend rechaza IPs del segmento 192.168.100.x (reservado para pruebas internas).</div>
+  </div>
+
+  <div class="mb-3">
+    <label class="form-label">Motor de contenedores</label>
+    <select class="form-select" formControlName="motor_contenedores">
+      <option *ngFor="let m of motores" [value]="m.value">{{ m.label }}</option>
+    </select>
+  </div>
+
+  <div class="form-check mb-2">
+    <input type="checkbox" class="form-check-input" id="proxy_inverso" formControlName="proxy_inverso" />
+    <label class="form-check-label" for="proxy_inverso">¿Enrutado por Nginx?</label>
+  </div>
+
+  <div class="form-check mb-3">
+    <input type="checkbox" class="form-check-input" id="en_produccion" formControlName="en_produccion" />
+    <label class="form-check-label" for="en_produccion">Estado producción</label>
+  </div>
+
+  <div class="d-flex gap-2">
+    <button type="submit" class="btn btn-primary" [disabled]="guardando">
+      {{ guardando ? 'Guardando...' : 'Guardar' }}
+    </button>
+    <a routerLink="/servidores" class="btn btn-outline-secondary">Cancelar</a>
+  </div>
+</form>

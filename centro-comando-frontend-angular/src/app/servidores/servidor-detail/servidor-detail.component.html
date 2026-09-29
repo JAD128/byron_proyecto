@@ -1,0 +1,50 @@
+<div *ngIf="cargando" class="text-muted">Cargando ficha del servidor...</div>
+<div class="alert alert-danger" *ngIf="error">{{ error }}</div>
+
+<ng-container *ngIf="servidor as s">
+  <section class="card mb-4 overflow-hidden">
+    <div class="bg-primary text-white px-3 py-3">
+      <h2 class="h4 mb-0">Ficha Técnica del Servidor: {{ s.nombre_host }}</h2>
+    </div>
+    <div class="p-4">
+      <div class="table-responsive">
+        <table class="table align-middle mb-3">
+          <tbody>
+            <tr><th scope="row">Dirección IP:</th><td class="text-end">{{ s.direccion_ip }}</td></tr>
+            <tr><th scope="row">Motor de Contenedores:</th><td class="text-end text-capitalize">{{ s.motor_contenedores }}</td></tr>
+            <tr><th scope="row">Proxy Inverso Nginx:</th><td class="text-end">{{ s.proxy_inverso ? 'Habilitado' : 'Deshabilitado' }}</td></tr>
+            <tr>
+              <th scope="row">Estado Operativo:</th>
+              <td class="text-end"><span class="badge" [class.bg-success]="s.en_produccion" [class.bg-secondary]="!s.en_produccion">{{ s.en_produccion ? 'Producción' : 'Fuera de producción' }}</span></td>
+            </tr>
+            <tr><th scope="row">Fecha de Despliegue:</th><td class="text-end">{{ s.fecha_despliegue | date: 'yyyy-MM-dd HH:mm' }}</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <a routerLink="/servidores" class="btn btn-outline-secondary">← Volver al Listado</a>
+    </div>
+  </section>
+
+  <section class="card overflow-hidden">
+    <div class="bg-dark text-white px-3 py-3 d-flex justify-content-between align-items-center gap-2">
+      <h2 class="h5 mb-0">Alertas e Incidencias Operativas</h2>
+      <a [routerLink]="['/incidencias/nuevo']" [queryParams]="{ servidor: s.id }" class="btn btn-danger btn-sm">+ Reportar Incidencia</a>
+    </div>
+    <div class="p-4">
+      <p *ngIf="!incidencias.length" class="text-muted mb-0">Este servidor no tiene incidencias registradas.</p>
+      <div class="table-responsive" *ngIf="incidencias.length">
+        <table class="table align-middle mb-0">
+          <thead><tr><th>Título</th><th>Severidad</th><th>Estado</th><th>Reportada</th></tr></thead>
+          <tbody>
+            <tr *ngFor="let incidencia of incidencias">
+              <td>{{ incidencia.titulo }}<div class="small text-muted">{{ incidencia.descripcion }}</div></td>
+              <td><span class="badge" [ngClass]="'badge-severidad-' + incidencia.severidad">{{ incidencia.severidad }}</span></td>
+              <td><span class="badge" [class.bg-success]="incidencia.resuelta" [class.bg-warning]="!incidencia.resuelta">{{ incidencia.resuelta ? 'Resuelta' : 'Abierta' }}</span></td>
+              <td>{{ incidencia.fecha_reporte | date: 'short' }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+</ng-container>

@@ -1,0 +1,13 @@
+body {
+  background-color: #f4f6f8;
+}
+
+.card {
+  border: none;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08);
+}
+
+.badge-severidad-critica { background-color: #dc3545 !important; }
+.badge-severidad-alta { background-color: #fd7e14 !important; }
+.badge-severidad-media { background-color: #ffc107 !important; color: #000; }
+.badge-severidad-baja { background-color: #6c757d !important; }

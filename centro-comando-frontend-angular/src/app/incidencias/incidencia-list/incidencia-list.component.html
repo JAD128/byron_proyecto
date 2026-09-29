@@ -1,0 +1,44 @@
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h2 class="mb-0">Incidencias Operativas</h2>
+  <a routerLink="/incidencias/nuevo" class="btn btn-primary">+ Nueva incidencia</a>
+</div>
+
+<div class="alert alert-danger" *ngIf="error">{{ error }}</div>
+<div *ngIf="cargando" class="text-muted">Cargando...</div>
+
+<div class="table-responsive card p-2" *ngIf="!cargando && incidencias.length">
+  <table class="table align-middle mb-0">
+    <thead>
+      <tr>
+        <th>Título</th>
+        <th>Servidor</th>
+        <th>Severidad</th>
+        <th>Estado</th>
+        <th>Reportada</th>
+        <th class="text-end">Acciones</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let i of incidencias">
+        <td>{{ i.titulo }}</td>
+        <td>{{ nombreServidor(i.servidor) }}</td>
+        <td><span class="badge" [ngClass]="'badge-severidad-' + i.severidad">{{ i.severidad }}</span></td>
+        <td>
+          <span class="badge" [class.bg-success]="i.resuelta" [class.bg-warning]="!i.resuelta">
+            {{ i.resuelta ? 'Resuelta' : 'Abierta' }}
+          </span>
+        </td>
+        <td>{{ i.fecha_reporte | date: 'short' }}</td>
+        <td class="text-end">
+          <button class="btn btn-sm btn-outline-success me-1" *ngIf="!i.resuelta" (click)="marcarResuelta(i)">
+            Resolver
+          </button>
+          <a [routerLink]="['/incidencias', i.id, 'editar']" class="btn btn-sm btn-outline-secondary me-1">Editar</a>
+          <button class="btn btn-sm btn-outline-danger" (click)="eliminar(i)">Eliminar</button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<p *ngIf="!cargando && !incidencias.length" class="text-muted">No hay incidencias registradas.</p>
